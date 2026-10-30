@@ -1,6 +1,8 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.127.0/build/three.module.js';
 import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.127.0/examples/jsm/controls/OrbitControls.js';
 
+import { createSurfaceTexture } from './textures.js';
+
 // Initialize the scene
 const scene = new THREE.Scene();
 
@@ -310,29 +312,17 @@ function updateCubeGeometry() {
   }
 }
 
-const textureLoader = new THREE.TextureLoader();
-
-const greyLaminatedTexture = textureLoader.load('https://i.imgur.com/0yEgr94.jpeg');
-const whiteLaminatedTexture = textureLoader.load('https://i.imgur.com/EjW8L4E.jpeg');
-const yellowLaminatedTexture = textureLoader.load('https://i.imgur.com/QrapdXF.jpeg');
-const naturalFinishTexture = textureLoader.load('https://i.imgur.com/P9YMPBs.jpg');
-const redLaminatedTexture = textureLoader.load('https://i.imgur.com/30oAplv.jpeg'); // New Red Texture
-const blueLaminatedTexture = textureLoader.load('https://i.imgur.com/AEN7fTa.jpeg'); // New Blue Texture
-
-const endGrainTexture = textureLoader.load('https://i.imgur.com/azPNWoQ.jpeg', (texture) => {
-  texture.wrapS = THREE.RepeatWrapping;
-  texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(0.1, 0.1);
-});
-
-const rotatedEndGrainTexture = textureLoader.load('https://i.imgur.com/azPNWoQ.jpeg', (texture) => {
-  texture.wrapS = THREE.RepeatWrapping;
-  texture.wrapT = THREE.RepeatWrapping;
-  texture.repeat.set(0.1, 0.1);
-  texture.rotation = Math.PI / 2;
-  texture.center.set(0.5, 0.5);
-});
-
+const greyLaminatedTexture = createSurfaceTexture(THREE, '#888888');
+const whiteLaminatedTexture = createSurfaceTexture(THREE, '#ffffff');
+const yellowLaminatedTexture = createSurfaceTexture(THREE, '#ffd700');
+const naturalFinishTexture = createSurfaceTexture(THREE, '#d4ad78', 'wood');
+const redLaminatedTexture = createSurfaceTexture(THREE, '#ff0000');
+const blueLaminatedTexture = createSurfaceTexture(THREE, '#0000ff');
+const endGrainTexture = createSurfaceTexture(THREE, '#d4ad78', 'edge');
+const rotatedEndGrainTexture = endGrainTexture.clone();
+rotatedEndGrainTexture.rotation = Math.PI / 2;
+rotatedEndGrainTexture.center.set(0.5, 0.5);
+rotatedEndGrainTexture.needsUpdate = true;
 let laminatedMaterial = new THREE.MeshStandardMaterial({
   map: redLaminatedTexture,
   transparent: cubeProperties.transparency,
